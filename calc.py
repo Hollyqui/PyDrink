@@ -1,8 +1,11 @@
 import matplotlib.pyplot as plt
 import numpy as np
-class calc:
+
+
+class Calculator:
     def __init__(self):
         self.time_array = []
+        self.eliminating = False
 
     #find the widmark factor
     def widmark(self, weight, height, gender):
@@ -36,17 +39,22 @@ class calc:
     #             count = i
     #         if self.time_array[i] < 0:
     #             self.time_array[i] = 0
-    def elimination(self, time_array, elimination_rate):
-        elimination_array = []
-        elimination_array.append(0)
-        for i in range(1, len(time_array)):
-            if time_array[i-1]-np.multiply(elimination_rate, np.divide(elimination_array,60))[i-1] > 0:
-                elimination_array.append(elimination_array[i-1]+1)
-            else:
-                elimination_array.append(elimination_array[i-1])
-        print(elimination_array)
-        elimination_array = np.multiply(elimination_rate, np.divide(elimination_array,60))
-        self.time_array = np.subtract(time_array, elimination_array)
+    def elimination(self, elimination_rate):
+        if self.eliminating == False:
+            elimination_array = []
+            elimination_array.append(0)
+            for i in range(1, len(self.time_array)):
+                if self.time_array[i-1]-np.multiply(elimination_rate, np.divide(elimination_array,60))[i-1] > 0:
+                    elimination_array.append(elimination_array[i-1]+1)
+                else:
+                    elimination_array.append(elimination_array[i-1])
+            print(elimination_array)
+            elimination_array = np.multiply(elimination_rate, np.divide(elimination_array,60))
+            self.time_array = np.subtract(self.time_array, elimination_array)
+            for i in range(len(self.time_array)):
+                if self.time_array[i] < 0:
+                    self.time_array[i] = 0
+            self.eliminating = True
 
 
     def array(self, volume, percent, time):
@@ -54,28 +62,23 @@ class calc:
         weight = 70
         height = 170
         gender = True
-        half_life = 18
+        half_life = 12
         temp_time_array = []
-        while len(temp_time_array)<400: #self.time_array[len(self.time_array)-1] < 0.001:
+        while len(temp_time_array)<500: #self.time_array[len(self.time_array)-1] < 0.001:
             abs_alc = self.drink(volume, percent, minutes, half_life)
             temp_time_array.append(self.bac_calc(abs_alc, self.widmark(weight, height, gender), weight))
             minutes += 1
         if len(self.time_array) == 0:
             self.time_array = temp_time_array
         else: self.time_array = np.add(self.time_array, temp_time_array)
-    def main(self, elimination_rate):
-        #None
-        self.elimination(self.time_array, elimination_rate)
+
+
 
 if __name__ == '__main__':
-    test = calc()
-    volume = 330
-    percent = 10
     elimination_rate = 0.018
-    test.array(volume, percent, 0)
-    test.array(volume, percent, 50)
-    test.array(volume, percent, 100)
-    test.main(elimination_rate)
-    plt.plot(test.time_array)
-    plt.ylabel('some numbers')
+    calc = Calculator()
+    calc.array(330, 10, 0)
+    calc.elimination(elimination_rate)
+    plt.plot(calc.time_array)
+    plt.ylabel('BAC')
     plt.show()
