@@ -21,7 +21,6 @@ class Calculator:
     def drink(self, volume, percent, minutes, half_life):
         half_lifes_passed = minutes/half_life
         alcohol = (volume/1000)*(percent/100)- (volume/1000)*(percent/100) * pow(0.5, half_lifes_passed)
-
         return alcohol
 
     def bac_calc(self,alcohol, widmark_factor, weight):
@@ -60,7 +59,7 @@ class Calculator:
     def array(self, volume, percent, time):
         minutes = -time
         weight = 70
-        height = 170
+        height = 193
         gender = True
         half_life = 12
         temp_time_array = []
@@ -77,7 +76,9 @@ class Calculator:
 if __name__ == '__main__':
     elimination_rate = 0.018
     calc = Calculator()
-    calc.array(330, 10, 0)
+    calc.array(330, 7.5, 0)
+    calc.array(330, 7.5, 55)
+    calc.array(330, 7.5, 75)
     calc.elimination(elimination_rate)
     plt.plot(calc.time_array)
     plt.ylabel('BAC')
