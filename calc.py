@@ -6,6 +6,7 @@ class Calculator:
     def __init__(self):
         self.time_array = []
         self.eliminating = False
+        self.elimination_rate = 0.018
 
     #find the widmark factor
     def widmark(self, weight, height, gender):
@@ -29,26 +30,16 @@ class Calculator:
         if C < 0: return 0
         else: return C
 
-    # def elimination(self, time_array, elimination_rate):
-    #     count = 0
-    #     for i in range(len(time_array)):
-    #         if time_array[i] > 0:
-    #             self.time_array[i] -= (elimination_rate * ((i-count) / 60))
-    #         else:
-    #             count = i
-    #         if self.time_array[i] < 0:
-    #             self.time_array[i] = 0
-    def elimination(self, elimination_rate):
+    def elimination(self):
         if self.eliminating == False:
             elimination_array = []
             elimination_array.append(0)
             for i in range(1, len(self.time_array)):
-                if self.time_array[i-1]-np.multiply(elimination_rate, np.divide(elimination_array,60))[i-1] > 0:
+                if self.time_array[i-1]-np.multiply(self.elimination_rate, np.divide(elimination_array,60))[i-1] > 0:
                     elimination_array.append(elimination_array[i-1]+1)
                 else:
                     elimination_array.append(elimination_array[i-1])
-            print(elimination_array)
-            elimination_array = np.multiply(elimination_rate, np.divide(elimination_array,60))
+            elimination_array = np.multiply(self.elimination_rate, np.divide(elimination_array,60))
             self.time_array = np.subtract(self.time_array, elimination_array)
             for i in range(len(self.time_array)):
                 if self.time_array[i] < 0:
@@ -70,16 +61,12 @@ class Calculator:
         if len(self.time_array) == 0:
             self.time_array = temp_time_array
         else: self.time_array = np.add(self.time_array, temp_time_array)
+    def main(self, volume, percent, time):
+        self.array(volume, percent, time)
+    def plot(self):
+        self.elimination()
+        plt.plot(self.time_array)
+        plt.ylabel('BAC')
+        plt.show()
 
 
-
-if __name__ == '__main__':
-    elimination_rate = 0.018
-    calc = Calculator()
-    calc.array(330, 7.5, 0)
-    calc.array(330, 7.5, 55)
-    calc.array(330, 7.5, 75)
-    calc.elimination(elimination_rate)
-    plt.plot(calc.time_array)
-    plt.ylabel('BAC')
-    plt.show()
