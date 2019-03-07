@@ -1,7 +1,5 @@
 """
 By Felix Quinque & Zbigniew Szymon Fonau
-
-
 This method creates an array with the BAC over time for all drinks consumed, it does not yet apply elimination
 """
 import matplotlib.pyplot as plt
@@ -9,8 +7,10 @@ import numpy as np
 
 
 class Adder:
-    def __init__(self):
+    def __init__(self, height, weight):
         self.time_array = [] # Array that will contain The Blood Alcohol Concentration (BAC) over time
+        self.height = height
+        self.weight = weight
 
     #find the widmark factor
     #Formulas taken from Searle, J. (2014). 'Alcohol calculations and their uncertainty'.
@@ -41,15 +41,13 @@ class Adder:
         except:
             self.time_array = []
         minutes = -time
-        weight = 70
-        height = 193
         gender = True
         half_life = 12
         temp_time_array = []
 
         while len(temp_time_array) < 1440: # makes a graph that shows the BAC for 24 hours after intake
             abs_alc = self.drink(volume, percent, minutes, half_life)
-            temp_time_array.append(self.bac_calc(abs_alc, self.widmark(weight, height, gender), weight))
+            temp_time_array.append(self.bac_calc(abs_alc, self.widmark(self.weight, self.height, gender), self.weight))
             minutes += 1
         if len(self.time_array) == 0:
             self.time_array = temp_time_array

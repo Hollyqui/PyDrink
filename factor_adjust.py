@@ -18,4 +18,4 @@ class Adjustment:
         return adjustment
 
 if __name__ == '__main__':
-    print(Adjustment.calc(0.047, 0, 200))
+    print(Adjustment.calc(0.047, 0, 400))

@@ -7,7 +7,10 @@ class Eliminator:
         self.time_array = np.load("added_drinks.npy")
         self.elination_array = []
         self.eliminating = False
-        self.elimination_rate = 0.018
+        try:
+            self.elimination_rate = np.average(np.load("adjustment.npy"))
+        except:
+            self.elimination_rate = 0.018
 
     def elimination(self):
         if self.eliminating == False:
@@ -32,9 +35,6 @@ class Eliminator:
             if self.time_array[i] != 0:
                 k = i
                 break
-        # while self.time_array[k] != 0:
-        #     k += 1
-
         plt.plot(self.time_array)
         plt.xlim(right =k+6, left = -5 )
         plt.ylabel('BAC')
