@@ -7,7 +7,8 @@ import numpy as np
 
 
 class Adder:
-    def __init__(self, height, weight):
+    def __init__(self, height, weight, minute):
+        self.minute = minute
         self.time_array = [] # Array that will contain The Blood Alcohol Concentration (BAC) over time
         self.height = height
         self.weight = weight
@@ -45,7 +46,7 @@ class Adder:
         half_life = 12
         temp_time_array = []
 
-        while len(temp_time_array) < 1440: # makes a graph that shows the BAC for 24 hours after intake
+        while len(temp_time_array) < self.minute + 1440: # makes a graph that shows the BAC for 24 hours after intake
             abs_alc = self.drink(volume, percent, minutes, half_life)
             temp_time_array.append(self.bac_calc(abs_alc, self.widmark(self.weight, self.height, gender), self.weight))
             minutes += 1
@@ -55,6 +56,7 @@ class Adder:
         np.save("added_drinks.npy", self.time_array)
     def plot(self):
         plt.plot(self.time_array)
+        plt.xlim(left=self.minute)
         plt.ylabel('BAC')
         plt.show()
 

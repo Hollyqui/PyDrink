@@ -1,9 +1,11 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from factor_adjust import Adjustment
 
 class Eliminator:
 
-    def __init__(self):
+    def __init__(self, minute):
+        self.minute = minute
         self.time_array = np.load("added_drinks.npy")
         self.elination_array = []
         self.eliminating = False
@@ -36,16 +38,21 @@ class Eliminator:
                 k = i
                 break
         plt.plot(self.time_array)
-        plt.xlim(right =k+6, left = -5 )
+        plt.xlim(right =k+6, left = self.minute-5 )
         plt.ylabel('BAC')
         plt.show()
 
     def load(self):
         self.elimination_array = np.load("elimination_array.npy")
         self.time_array = np.load("time_array.npy")
+    def adjustment(self, sober_time):
+        max_value = np.max(self.time_array)
+        Adjustment.calc(max_value, 0 , sober_time)
+
 
 
 if __name__ == '__main__':
     eli = Eliminator()
+    eli.adjustment(200)
     eli.elimination()
     eli.plot()
