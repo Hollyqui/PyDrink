@@ -6,7 +6,7 @@ class Adder:
     def __init__(self):
         self.time_array = []
         self.eliminating = False
-        self.elimination_rate = 0.018
+        self.elimination_rate = 0.009
 
     #find the widmark factor
     def widmark(self, weight, height, gender):
@@ -30,14 +30,19 @@ class Adder:
         if C < 0: return 0
         else: return C
 
-    def er(self, volume, percent, time):
+    def array(self, volume, percent, time):
+        try:
+            self.time_array = np.load('added_drinks.npy')
+        except:
+            self.time_array = []
         minutes = -time
         weight = 70
         height = 193
         gender = True
         half_life = 12
         temp_time_array = []
-        while len(temp_time_array)<500: #self.time_array[len(self.time_array)-1] < 0.001:
+
+        while len(temp_time_array) < 1440: #self.time_array[len(self.time_array)-1] < 0.001:
             abs_alc = self.drink(volume, percent, minutes, half_life)
             temp_time_array.append(self.bac_calc(abs_alc, self.widmark(weight, height, gender), weight))
             minutes += 1
@@ -51,7 +56,8 @@ class Adder:
         plt.show()
 
 
+
 if __name__ == '__main__':
     add = Adder()
-    add.array(330, 10, 0)
+    add.array(330, 10, 400)
     add.plot()

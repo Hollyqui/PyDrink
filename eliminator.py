@@ -24,11 +24,26 @@ class Eliminator:
                 if self.time_array[i] < 0:
                     self.time_array[i] = 0
             self.eliminating = True
-        np.save("eliminated_array", time_array)
+        np.save("eliminated_array", self.time_array)
     def plot(self):
+
+        k = 1
+        for i in reversed(range(1,len(self.time_array))):
+            if self.time_array[i] != 0:
+                k = i
+                break
+        # while self.time_array[k] != 0:
+        #     k += 1
+
         plt.plot(self.time_array)
+        plt.xlim(right =k+6, left = -5 )
         plt.ylabel('BAC')
         plt.show()
+
+    def load(self):
+        self.elimination_array = np.load("elimination_array.npy")
+        self.time_array = np.load("time_array.npy")
+
 
 if __name__ == '__main__':
     eli = Eliminator()
