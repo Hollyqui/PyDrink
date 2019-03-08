@@ -4,7 +4,9 @@ This method creates an array with the BAC over time for all drinks consumed, it 
 """
 import matplotlib.pyplot as plt
 import numpy as np
-
+import datetime as dt
+import matplotlib.dates as mdates
+import pandas as pd
 
 class Adder:
     def __init__(self, height, weight, minute):
@@ -46,7 +48,7 @@ class Adder:
         half_life = 12
         temp_time_array = []
 
-        while len(temp_time_array) < self.minute + 1440: # makes a graph that shows the BAC for 24 hours after intake
+        while len(temp_time_array) < 1440: # makes a graph that shows the BAC for 24 hours after intake
             abs_alc = self.drink(volume, percent, minutes, half_life)
             temp_time_array.append(self.bac_calc(abs_alc, self.widmark(self.weight, self.height, gender), self.weight))
             minutes += 1
@@ -55,14 +57,29 @@ class Adder:
         else: self.time_array = np.add(self.time_array, temp_time_array)
         np.save("added_drinks.npy", self.time_array)
     def plot(self):
-        plt.plot(self.time_array)
-        plt.xlim(left=self.minute)
-        plt.ylabel('BAC')
+        x = [ dt.datetime.now() +dt.timedelta(hours = i) for i in range(int(len(self.time_array)))]
+        times = pd.date_range(start=0, periods=1440, freq='1min')
+        fig, ax = plt.subplots(1)
+        fig.autofmt_xdate()
+        plt.plot(times, self.time_array)
+
+        xfmt = mdates.DateFormatter('%H:%M')
+        ax.xaxis.set_major_formatter(xfmt)
+
         plt.show()
+        xfmt = mdates.DateFormatter('%H:%M')
+        ax.xaxis.set_major_formatter(xfmt)
+        #plt.plot( x, self.time_array)
+        #plt.gcf().autofmt_xdate()
+
+        # plt.xlim(left=self.minute)
+        # plt.ylabel('BAC')
+        #
+        # plt.show()
 
 
 
 if __name__ == '__main__':
-    add = Adder()
-    add.array(330, 10, 400)
+    add = Adder(170,60,800)
+    add.array(330, 10, 800)
     add.plot()

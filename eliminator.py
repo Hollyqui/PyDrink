@@ -1,6 +1,11 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib import dates
+import datetime
 from factor_adjust import Adjustment
+import pandas as pd
+import matplotlib.dates as mdates
+
 
 class Eliminator:
 
@@ -37,10 +42,25 @@ class Eliminator:
             if self.time_array[i] != 0:
                 k = i
                 break
-        plt.plot(self.time_array)
-        plt.xlim(right =k+6, left = self.minute-5 )
-        plt.ylabel('BAC')
+        # fig = plt.figure()
+        # ax = fig.add_subplot(111)
+        # ax.plot(self.time_array)
+        # ax.yaxis_date()
+
+        times = pd.date_range(start=0, periods=1440, freq='1min')
+        fig, ax = plt.subplots(1)
+        fig.autofmt_xdate()
+        plt.plot(times, self.time_array)
+        # plt.xlim(right=k + 6, left=self.minute - 5)
+
+        xfmt = mdates.DateFormatter('%H:%M')
+        ax.xaxis.set_major_formatter(xfmt)
         plt.show()
+
+        # plt.plot(self.time_array)
+
+        # plt.ylabel('BAC')
+        # plt.show()
 
     def load(self):
         self.elimination_array = np.load("elimination_array.npy")
@@ -52,7 +72,7 @@ class Eliminator:
 
 
 if __name__ == '__main__':
-    eli = Eliminator()
+    eli = Eliminator(800)
     eli.adjustment(200)
     eli.elimination()
     eli.plot()
