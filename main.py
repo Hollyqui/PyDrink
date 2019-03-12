@@ -21,7 +21,6 @@ try:
     user_info = user_info.tolist()
     a = Adder(user_info[0][0], user_info[0][1], user_info[0][3])
     temp = []
-    limit = user_info[0][4]
     decision = int(input("choose an option: 1. to add a drink 2. to say that you are sober"))
     if decision == 1:
         # temp.append(int(input("How full are you?")))
@@ -35,17 +34,11 @@ try:
         temp.append(int(input("How much % alcohol did your drink have?")))
         temp.append(int(input("How much ml of you drink did you have?")))
         user_info.append(temp)
-        a.array(temp[3], temp[2],temp[0] )
+        a.array(temp[3], temp[2], temp[0])
         a.plot()
 
         e = Eliminator(user_info[0][3])
         e.elimination()
-
-        if limit != -1:
-            if e.max_value() > limit:
-                print('You have crossed your BAC limit! You should stop drinking!')
-        elif e.max_value()> 0.3:
-            print("You're BAC is over 0.3, you might get alcohol poisoning soon, I advise you to stop drinking")
         e.plot()
         elimination_array = np.load("eliminated_array.npy")
         elim_time = np.array(elimination_array[minute], ndmin=2)
@@ -80,12 +73,5 @@ except:
     minute = int((time[3] + time[4]))
     minute += hour * 60
     temp.append(minute)
-    limit = input('Do you want to set a costume limit? (Y/N)')
-    if limit == 'Y':
-        limit = float(input('What is the max BAC you want to achieve?'))
-
-    else:
-        limit = -1
-    temp.append(limit)
     user_info.append(temp)
 np.save(name+".npy", user_info)

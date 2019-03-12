@@ -11,8 +11,8 @@ from keras.models import load_model
 
 
 def learn(bac_array, user_input_array):
-    X = bac_array
-    y = user_input_array
+    X = user_input_array
+    y = bac_array
 
     model = keras.Sequential([
         keras.layers.Dense(input_shape=(1,), units=2),
@@ -37,9 +37,6 @@ def learn(bac_array, user_input_array):
       epochs=EPOCHS,
       verbose=1,)
     model.save('nn_model.h5')
-    predictions = model.predict(bac_array)
-    print(bac_array)
-    print(predictions)
 
 
 def predict(bac):
