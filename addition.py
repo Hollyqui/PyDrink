@@ -48,7 +48,7 @@ class Adder:
         half_life = 12
         temp_time_array = []
 
-        while len(temp_time_array) < 1440: # makes a graph that shows the BAC for 24 hours after intake
+        while len(temp_time_array) < 1440+time: # makes a graph that shows the BAC for 24 hours after intake
             abs_alc = self.drink(volume, percent, minutes, half_life)
             temp_time_array.append(self.bac_calc(abs_alc, self.widmark(self.weight, self.height, gender), self.weight))
             minutes += 1
@@ -58,7 +58,7 @@ class Adder:
         np.save("added_drinks.npy", self.time_array)
     def plot(self):
         x = [ dt.datetime.now() +dt.timedelta(hours = i) for i in range(int(len(self.time_array)))]
-        times = pd.date_range(start=0, periods=1440, freq='1min')
+        times = pd.date_range(start=self.minute, periods=len(self.time_array), freq='1min')
         fig, ax = plt.subplots(1)
         fig.autofmt_xdate()
         plt.plot(times, self.time_array)
@@ -81,5 +81,5 @@ class Adder:
 
 if __name__ == '__main__':
     add = Adder(170,60,800)
-    add.array(330, 10, 800)
+    add.array(330, 9, 1120)
     add.plot()

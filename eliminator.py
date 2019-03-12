@@ -47,7 +47,7 @@ class Eliminator:
         # ax.plot(self.time_array)
         # ax.yaxis_date()
 
-        times = pd.date_range(start=0, periods=1440, freq='1min')
+        times = pd.date_range(start=0, periods=1440+self.minute, freq='1min')
         fig, ax = plt.subplots(1)
         fig.autofmt_xdate()
         plt.plot(times, self.time_array)
@@ -65,9 +65,10 @@ class Eliminator:
     def load(self):
         self.elimination_array = np.load("elimination_array.npy")
         self.time_array = np.load("time_array.npy")
+    def max_value(self):
+        return np.max(self.time_array)
     def adjustment(self, sober_time):
-        max_value = np.max(self.time_array)
-        Adjustment.calc(max_value, 0 , sober_time)
+        Adjustment.calc(max_value(), 0 , sober_time)
 
 
 
