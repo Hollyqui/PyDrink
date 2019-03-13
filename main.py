@@ -2,8 +2,7 @@ import numpy as np
 from addition import Adder
 from eliminator import Eliminator
 import neural_network
-
-name = input("What's your name?")
+import os
 
 try:
     bac_array = np.load("bac_array.npy")
@@ -16,8 +15,34 @@ except:
     user_input_array = []
     print("arrays created")
 
-try:
-    user_info = np.load(name+".npy")
+name = input("Do you want to start a new drinking session? Y/n")
+if name == "Y":
+    try:
+        os.remove("drinking_session.npy")
+    except:
+        None
+    user_info = []
+    temp = []
+    temp.append(int(input("How tall are you?")))
+    temp.append(int(input("How much do you weight?")))
+    temp.append(int(input("How old are you?")))
+    time = input("What is the time that you started drinking? (enter in XX:YY format)")
+    hour = int((time[0] + time[1]))
+    minute = int((time[3] + time[4]))
+    minute += hour * 60
+    temp.append(minute)
+    limit = input('Do you want to set a costume limit? (Y/N)')
+    if limit == 'Y':
+        limit = float(input('What is the max BAC you want to achieve?'))
+
+    else:
+        limit = -1
+    temp.append(limit)
+    user_info.append(temp)
+
+
+elif name == "n":
+    user_info = np.load("drinking_session.npy")
     user_info = user_info.tolist()
     a = Adder(user_info[0][0], user_info[0][1], user_info[0][3])
     temp = []
@@ -60,18 +85,4 @@ try:
         e.adjustment(sober_time)
     np.save("bac_array", bac_array)
     np.save("user_input_array", user_input_array)
-
-
-except:
-    user_info = []
-    temp = []
-    temp.append(int(input("How tall are you?")))
-    temp.append(int(input("How much do you weight?")))
-    temp.append(int(input("How old are you?")))
-    time = input("What is the time that you started drinking? (enter in XX:YY format)")
-    hour = int((time[0] + time[1]))
-    minute = int((time[3] + time[4]))
-    minute += hour * 60
-    temp.append(minute)
-    user_info.append(temp)
-np.save(name+".npy", user_info)
+np.save("drinking_session.npy", user_info)
