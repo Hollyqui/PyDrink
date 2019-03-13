@@ -42,6 +42,7 @@ def learn(bac_array, user_input_array):
     model.save('nn_model.h5')
 
     # predicts perceived drunkenness for any bac
+
 def predict(bac):
     model = load_model('nn_model.h5')
     optimizer = tf.train.AdamOptimizer()
@@ -52,3 +53,16 @@ def predict(bac):
 
     return predictions
 
+def show_curve():
+    model = load_model('nn_model.h5')
+    optimizer = tf.train.AdamOptimizer()
+    model.compile(loss='mean_squared_error',
+                  optimizer=optimizer,
+                  metrics=['mean_absolute_error', 'mean_squared_error'])
+    bac_array = []
+    for i in range(100):
+        bac_array.append(i*(0.5/100))
+    predictions = model.predict(bac_array)
+    print("should plot now")
+    plt.plot(bac_array, predictions)
+    plt.show()
