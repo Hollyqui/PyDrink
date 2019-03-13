@@ -3,7 +3,11 @@ from addition import Adder
 from eliminator import Eliminator
 import neural_network
 import os
-
+bac_array = np.load("bac_array.npy")
+user_info = np.load("user_input_array.npy")
+print(bac_array)
+print(user_info)
+neural_network.show_curve()
 # tries to load the arrays necessary to train the neural network and
 # creates them if they don't exist
 try:
@@ -27,10 +31,10 @@ if name == "Y":
         None
     user_info = []
     temp = []
-    temp.append(int(input("How tall are you?")))
-    temp.append(int(input("How much do you weight?")))
-    temp.append(int(input("How old are you?")))
-    hunger = int(input("How satiated are you on a scale from 0-10?"))
+    temp.append(float(input("How tall are you?")))
+    temp.append(float(input("How much do you weight?")))
+    temp.append(float(input("How old are you?")))
+    hunger = float(input("How satiated are you on a scale from 0-10?"))
 
     absorption_halftime = (((hunger - 0) * 12) / 10) + 6
     time = input("What is the time that you started drinking? (enter in XX:YY format)")
@@ -71,10 +75,10 @@ elif name == "n":
         temp.append(minute)
         # gets alcohol intake and values on how drunk the user feels
         # in order to calculate bac and feed neural net
-        how_drunk = int(input("How drunk do you feel?"))
+        how_drunk = float(input("How drunk do you feel?"))
         temp.append(how_drunk)
-        temp.append(int(input("How much % alcohol did your drink have?")))
-        temp.append(int(input("How much ml of you drink did you have?")))
+        temp.append(float(input("How much % alcohol did your drink have?")))
+        temp.append(float(input("How much ml of you drink did you have?")))
         user_info.append(temp)
         a.array(temp[3], temp[2], temp[0], hunger)
         a.plot()
@@ -107,10 +111,10 @@ elif name == "n":
         minute = int((time[3] + time[4]))
         minute += hour * 60
         temp.append(minute)
-        temp.append(int(input("How much % alcohol did your drink have?")))
-        temp.append(int(input("How much ml of you drink did you have?")))
+        temp.append(float(input("How much % alcohol did your drink have?")))
+        temp.append(float(input("How much ml of you drink did you have?")))
         user_info.append(temp)
-        a.array(temp[2], temp[1], temp[0])
+        a.array(temp[2], temp[1], temp[0], hunger)
         a.plot()
 
         e = Eliminator(user_info[0][3])
@@ -119,7 +123,7 @@ elif name == "n":
 
         added_drinks = np.load("added_drinks.npy")
         added_drinks = np.delete(added_drinks, -1)
-        np.save(np.save("added_drinks.npy", added_drinks))
+        np.save("added_drinks.npy", added_drinks)
         elimination_array = np.load("eliminated_array.npy")
         elim_time = np.array(elimination_array[minute], ndmin=2)
         prediction = neural_network.predict(elim_time)
