@@ -30,6 +30,9 @@ if name == "Y":
     temp.append(int(input("How tall are you?")))
     temp.append(int(input("How much do you weight?")))
     temp.append(int(input("How old are you?")))
+    hunger = int(input("How satiated are you on a scale from 0-10?"))
+
+    absorption_halftime = (((hunger - 0) * 12) / 10) + 6
     time = input("What is the time that you started drinking? (enter in XX:YY format)")
     hour = int((time[0] + time[1]))
     minute = int((time[3] + time[4]))
@@ -42,6 +45,7 @@ if name == "Y":
     else:
         limit = -1
     temp.append(limit)
+    temp.append(absorption_halftime)
     user_info.append(temp)
     np.save("drinking_session.npy", user_info)
 
@@ -50,6 +54,8 @@ elif name == "n":
     user_info = np.load("drinking_session.npy")
     user_info = user_info.tolist()
     a = Adder(user_info[0][0], user_info[0][1], user_info[0][3])
+    limit = user_info[0][4]
+    hunger = user_info[0][5]
     temp = []
     decision = int(input("choose an option: 1. to add a drink 2. to say that you are sober 3. to preview how a drink will affect your BAC"))
 
@@ -70,7 +76,7 @@ elif name == "n":
         temp.append(int(input("How much % alcohol did your drink have?")))
         temp.append(int(input("How much ml of you drink did you have?")))
         user_info.append(temp)
-        a.array(temp[3], temp[2], temp[0])
+        a.array(temp[3], temp[2], temp[0], hunger)
         a.plot()
         e = Eliminator(user_info[0][3])
         e.elimination()

@@ -38,17 +38,16 @@ class Adder:
         if C < 0: return 0 #if the concentration would be under 0 return 0 since you can't have a concentration <0
         else: return C
 
-    def array(self, volume, percent, time):
+    def array(self, volume, percent, time, half_life):
         try:
             self.time_array = np.load('added_drinks.npy') #If there is an array with drinks use that (allows muliple drinks)
         except:
             self.time_array = []
         minutes = -time
         gender = True
-        half_life = 12
         temp_time_array = []
 
-        while len(temp_time_array) < 1440+time: # makes a graph that shows the BAC for 24 hours after intake
+        while len(temp_time_array) < 1440+self.minute: # makes a graph that shows the BAC for 24 hours after intake
             abs_alc = self.drink(volume, percent, minutes, half_life)
             temp_time_array.append(self.bac_calc(abs_alc, self.widmark(self.weight, self.height, gender), self.weight))
             minutes += 1
@@ -83,3 +82,5 @@ if __name__ == '__main__':
     add = Adder(170,60,800)
     add.array(330, 9, 1120)
     add.plot()
+
+
